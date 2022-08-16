@@ -22,7 +22,7 @@ class ViewController: UIViewController {
         
         if nuberArr.count <= 2 { return } else {
         
-        let resultNum = "\(example) \(nuberArr[1]) \(nuberArr[2])"
+        let resultNum = "\(example)\(nuberArr[1])\(nuberArr[2])"
         
         resultNumber.text = resultNum
         UIPasteboard.general.string = resultNum
@@ -41,11 +41,7 @@ class ViewController: UIViewController {
     }
     
     private func callNumber(phoneNumber: String) {
-        guard let url = URL(string: "telprompt://\(phoneNumber)"),
-            UIApplication.shared.canOpenURL(url) else {
-            return
-        }
-        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        UIApplication.shared.open(NSURL(string: "tel://\(phoneNumber)") as! URL)
     }
 
 }
