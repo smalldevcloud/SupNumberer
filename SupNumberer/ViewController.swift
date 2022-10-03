@@ -9,29 +9,33 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    
     @IBOutlet weak var wrongNumberTF: UITextField!
+    @IBOutlet weak var resultNumber: UITextField!
     
-   
-   
     @IBAction func button(_ sender: UIButton) {
-        
-        let example = "**80"
+
         var tfToString = wrongNumberTF.text!
-        let nuberArr = tfToString.components(separatedBy: " ")
+        resultNumber.text = trimTrash(str: tfToString)
+        callNumber(phoneNumber: trimTrash(str: tfToString))
         
-        if nuberArr.count <= 2 { return } else {
-        
-        let resultNum = "\(example)\(nuberArr[1])\(nuberArr[2])"
-        
-        resultNumber.text = resultNum
-        UIPasteboard.general.string = resultNum
-            callNumber(phoneNumber: resultNum)
-            
-        }
     }
     
-    @IBOutlet weak var resultNumber: UITextField!
+    func trimTrash(str: String) -> String {
+        
+
+        var str1 = str.replacingOccurrences(of: "+", with: "", options: NSString.CompareOptions.literal, range: nil)
+        var str2 = str1.replacingOccurrences(of: "-", with: "", options: NSString.CompareOptions.literal, range: nil)
+        var str3 = str2.replacingOccurrences(of: "(", with: "", options: NSString.CompareOptions.literal, range: nil)
+        var str4 = str3.replacingOccurrences(of: ")", with: "", options: NSString.CompareOptions.literal, range: nil)
+        var str5 = str4.replacingOccurrences(of: " ", with: "", options: NSString.CompareOptions.literal, range: nil)
+        
+        let str6 = String(str5.dropFirst(3))
+        let result = "**80\(str6)"
+        
+        return result
+    }
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +47,4 @@ class ViewController: UIViewController {
     private func callNumber(phoneNumber: String) {
         UIApplication.shared.open(NSURL(string: "tel://\(phoneNumber)") as! URL)
     }
-
 }
-
