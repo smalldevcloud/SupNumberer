@@ -16,32 +16,39 @@ class ViewController: UIViewController {
 
         var tfToString = wrongNumberTF.text!
         resultNumber.text = trimTrash(str: tfToString)
+        UIPasteboard.general.string = trimTrash(str: tfToString)
         callNumber(phoneNumber: trimTrash(str: tfToString))
+        
         
     }
     
     func trimTrash(str: String) -> String {
         
 
-        var str1 = str.replacingOccurrences(of: "+", with: "", options: NSString.CompareOptions.literal, range: nil)
-        var str2 = str1.replacingOccurrences(of: "-", with: "", options: NSString.CompareOptions.literal, range: nil)
-        var str3 = str2.replacingOccurrences(of: "(", with: "", options: NSString.CompareOptions.literal, range: nil)
-        var str4 = str3.replacingOccurrences(of: ")", with: "", options: NSString.CompareOptions.literal, range: nil)
-        var str5 = str4.replacingOccurrences(of: " ", with: "", options: NSString.CompareOptions.literal, range: nil)
+        let unsafeChars = CharacterSet.alphanumerics.inverted
+        let lowLetters = CharacterSet.lowercaseLetters
+        let uppLetters = CharacterSet.uppercaseLetters
+
+        let cleanChars  = str.components(separatedBy: unsafeChars).joined(separator: "")
+        let cleanLowLett = cleanChars.components(separatedBy: lowLetters).joined(separator: "")
+        let cleanUppLett = cleanLowLett.components(separatedBy: uppLetters).joined(separator: "")
         
-        let str6 = String(str5.dropFirst(3))
-        let result = "**80\(str6)"
+        let dropFirst = String(cleanUppLett.dropFirst(3))
+        let result = "**80\(dropFirst)"
         
         return result
     }
     
-    
+    override func viewWillAppear(_ animated: Bool) {
+        let pasteboardString: String? = UIPasteboard.general.string
+        if let theString = pasteboardString {
+            wrongNumberTF.text = theString }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .lightGray
         wrongNumberTF.clearButtonMode = .always
-        
     }
     
     private func callNumber(phoneNumber: String) {
